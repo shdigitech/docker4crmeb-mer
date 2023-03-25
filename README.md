@@ -1,6 +1,6 @@
 # Docker Compose
 
-This is a Docker Compose configuration for quickly and easily spinning up a test / development environment for CRMEB PRO version. 
+This is a Docker Compose configuration for quickly and easily spinning up a test / development environment for CRMEB-MER(多商户) version. 
 
 This compose file defines an application with four services: `nginx`, `php`, `MySQL`, `Redis`. The image for `php` is built with the `Dockerfile` inside the `php` directory. It builds on top of php `7.3`,  with `Supervisor` and `Swoole` required by CRMEB.
 
@@ -20,85 +20,104 @@ Earlier versions may also work but haven’t been tested.
 
 ## How to use
 
-1. Clone this repo
+1. Download CRMEB-MER application code, unzip it to `crmeb-mer` folder.
+   <aside>
+    💡 You can use any other folder than `crmeb-mer`, just be sure to change the .env file in the docker compose folder.
+   </aside>
 
+
+2. Deal with CRMEB-MER's 'encrypted' files according to php version, in this case, `7.3`.
+   ```bash
+   cd crmeb-mer
+   unzip install/compiled/compiled73.zip
+   mv crmeb.php ./config/
+   mv basic ./crmeb/
+   cd ..
+   ```
+
+3. Now on to docker compose. Clone the repo
     
     ```bash
-    git clone https://github.com/shdigitech/docker4crmebpro.git
+    git clone https://github.com/shdigitech/docker4crmeb-mer.git
+    ```
+
+4. Create environment file
+    ```bash
+    cp .env.default .env
     ```
     
-2. Unzip CRMEB PRO application code to `crmebpro` folder. Check you have the folder structure like this(both repos sit on the same level)
+5. Check you have the folder structure like this(both repos sit on the same level)
     
     ```bash
     .
-    ├── crmebpro
-    └── docker4crmebpro
+    ├── crmeb-mer
+    └── docker4crmeb-mer
     ```
-    
-3. According to CRMEBPRO installation procedures, Copy certain files corresponding to PHP version, in this case, 7.3.
+    <aside>
+    💡 if you have put CRMEB-MER application code to another folder, change the `PATH_CRMEB` variable in the `.env` file accordingly.
+    </aside>
 
-    
+6. Enter the docker-compose folder and spin up containers
     ```bash
-    cp -r ./crmebpro/help/7.3/* ./crmebpro/
-    ```
-    
-4. Enter the docker-compose folder and spin up containers
-
-    
-    ```bash
-    cd docker4crmebpro
-    docker compose up -d
+    cd docker4crmeb-mer
+    docker compose --profile dev up -d
     ```
     
     <aside>
+    💡 Note it is assumed the production environment is running a dedicated database and does not need a mysql service in this docker compose, so it doesn't start one by default. In Dev environment you can specify the `dev` profile either in the command line or in the `.env` file (`'export COMPOSE_PROFILES=dev'`) in order to spin up MySql and PHPMYADMIN services. 
     💡 First time build might take a while depending on your hardware configuration, be patient.    
+
+    💡 Omitting the `-d` parameter will output a bunch of logs on the console, which could be helpful for debugging. Note that pressing Ctrl + C or closing the console window will shutdown all containers.
+    💡 Note there are two profiles for Production and Dev environments respectively. MySql and PHPMYADMIN services will only be available in Dev profile. 
     </aside>
     
+7. Now open your favorite browser and navigate to
     
-    <aside>
-    💡 Omitting the ‘-d’ parameter will output a bunch of logs on the console, which could be helpful for debugging. Note that pressing Ctrl + C or closing the console window will shutdown all containers.    
-    </aside>
-    
-5. Now open your favorite browser and navigate to
-    
-    [http://localhost:28138/](http://localhost:28138/)
+    [http://localhost:28238/](http://localhost:28238/)
     
     You shall see the installation wizard page of CRMEB
-    
-6. Configuration for services(other fields can be left default)
-    
-    
-    | 数据库MySql配置 |  |
-    | --- | --- |
-    | 数据库服务器 | mysql |
-    | 数据库端口 | 3306 |
-    | 数据库用户名 | crmeb |
-    | 数据库密码 | crmeb |
-    | 数据库名 | crmeb |
-    
-    | Redis配置 |  |
-    | --- | --- |
-    | 服务器地址 | redis |
-    | 端口号 | 6379 |
-    
-7. After installation finishes, restart containers for good measure. (Otherwise you'll likely to encounter 'Login failed' error)
-    ```bash
-    docker compose restart
-    ```
-
-8. After containers restarted, you can access the frontend site and admin site respectively at
-    1. [http://localhost:28138](http://localhost:28138)
-    2. [http://localhost:28138/admin](http://localhost:28138/admin)
-    
     <aside>
-    💡 Note: at the time of writing this document, CRMEB has a bug that the admin page will redirect to its login page on port 80 instead of our custom port, simply add the port number back to the login page URL and you should be able to access the login page.
+    💡 You can also change the port in the `.env` file accordingly.
     </aside>
     
-9. This docker-compose combo also packs a PHPMYADMIN for easy database access, you can find it at
+8. Configuration for services(other fields can be left default)
     
-    [http://localhost:28139/](http://localhost:28139/)
     
-10. To shut everything down
+    | 数据库MySql配置 |           |
+    | --------------- | --------- |
+    | 数据库服务器    | mysql     |
+    | 数据库端口      | 3306      |
+    | 数据库用户名    | crmeb_mer |
+    | 数据库密码      | crmeb_mer |
+    | 数据库名        | crmeb_mer |
+    
+    | Redis配置  |       |
+    | ---------- | ----- |
+    | 服务器地址 | redis |
+    | 端口号     | 6379  |
+    
+    <aside>
+    💡 You can also find / change these values in the `.env` file.
+    </aside>
+
+9.  After installation finishes, it is needed to restart the php services for CRMEB-MER to work.
+    ```bash
+    docker compose restart php-fpm
+    ```
+
+10. After restarting, you can access the frontend site and admin site respectively at
+    1. [http://localhost:28238](http://localhost:28238)
+    2. [http://localhost:28238/admin](http://localhost:28238/admin)
+    
+    <aside>
+    💡 Note: it may take a while for the front end site to load.
+    </aside>
+    
+11. This docker-compose combo also packs a PHPMYADMIN for easy database access, you can find it at
+    
+    [http://localhost:28239/](http://localhost:28239/)
+    
+12. To shut everything down
     
     ```bash
     docker compose down
