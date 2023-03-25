@@ -43,9 +43,10 @@ Earlier versions may also work but haven’t been tested.
 
 4. Create environment file
     ```bash
+    cd docker4crmeb-mer
     cp .env.default .env
     ```
-    
+
 5. Check you have the folder structure like this(both repos sit on the same level)
     
     ```bash
@@ -59,7 +60,6 @@ Earlier versions may also work but haven’t been tested.
 
 6. Enter the docker-compose folder and spin up containers
     ```bash
-    cd docker4crmeb-mer
     docker compose --profile dev up -d
     ```
     
