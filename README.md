@@ -1,10 +1,10 @@
-# Docker Compose
+# CRMEB-MER Docker Compose
 
-This is a Docker Compose configuration for quickly and easily spinning up a test / development environment for CRMEB-MER(多商户) version. 
+This is a Docker Compose configuration for quickly and easily spinning up a Production / Development environment for CRMEB-MER(多商户) version. 
 
 This compose file defines an application with four services: `nginx`, `php`, `MySQL`, `Redis`. The image for `php` is built with the `Dockerfile` inside the `php` directory. It builds on top of php `7.3`,  with `Supervisor` and `Swoole` required by CRMEB.
 
-When deploying the application, docker compose maps the container port `80` to port `28138` of the host as specified in the file. Make sure port `28138` on the host is not occupied, otherwise the port should be changed.
+When deploying the application, docker compose maps the container port `80` to port `28238` of the host as specified in the file. Make sure port `28238` on the host is not occupied, otherwise the port should be changed.
 
 ## Prerequisites
 
@@ -55,7 +55,7 @@ Earlier versions may also work but haven’t been tested.
     └── docker4crmeb-mer
     ```
     <aside>
-    💡 if you have put CRMEB-MER application code to another folder, change the `PATH_CRMEB` variable in the `.env` file accordingly.
+    💡 If you've put the CRMEB-MER application code to a different folder, be sure to update the `PATH_CRMEB` variable in the `.env` file to reflect the new location.
     </aside>
 
 6. Enter the docker-compose folder and spin up containers
@@ -64,18 +64,18 @@ Earlier versions may also work but haven’t been tested.
     ```
     
     <aside>
-    💡 Note it is assumed the production environment is running a dedicated database and does not need a mysql service in this docker compose, so it doesn't start one by default. In Dev environment you can specify the `dev` profile either in the command line or in the `.env` file (`'export COMPOSE_PROFILES=dev'`) in order to spin up MySql and PHPMYADMIN services. 
+    💡 Please note that the production environment assumes a dedicated database is already running, so the MySQL service is not started by default in this Docker Compose. However, in the development environment, you can specify the `dev` profile either through the command line or in the `.env` file (by using `export COMPOSE_PROFILES=dev`) in order to start up the MySQL and PHPMYADMIN services. 
+
     💡 First time build might take a while depending on your hardware configuration, be patient.    
 
     💡 Omitting the `-d` parameter will output a bunch of logs on the console, which could be helpful for debugging. Note that pressing Ctrl + C or closing the console window will shutdown all containers.
-    💡 Note there are two profiles for Production and Dev environments respectively. MySql and PHPMYADMIN services will only be available in Dev profile. 
     </aside>
     
 7. Now open your favorite browser and navigate to
     
     [http://localhost:28238/](http://localhost:28238/)
     
-    You shall see the installation wizard page of CRMEB
+    You shall see the installation wizard page of CRMEB. Please follow the prompts to complete the installation.
     <aside>
     💡 You can also change the port in the `.env` file accordingly.
     </aside>
@@ -97,10 +97,10 @@ Earlier versions may also work but haven’t been tested.
     | 端口号     | 6379  |
     
     <aside>
-    💡 You can also find / change these values in the `.env` file.
+    💡 You can also find / change these parameters in the `.env` file.
     </aside>
 
-9.  After installation finishes, it is needed to restart the php services for CRMEB-MER to work.
+9.  Once the installation is complete, it's necessary to restart the PHP services to ensure that CRMEB-MER is fully functional.
     ```bash
     docker compose restart php-fpm
     ```
