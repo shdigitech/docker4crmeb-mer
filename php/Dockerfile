@@ -15,7 +15,7 @@ FROM chialab/php:7.3-fpm
 # Install supervisord
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-    supervisor 
+    supervisor libboost-all-dev git
 
 # Remove lists
 RUN rm -rf /var/lib/apt/lists/*
@@ -33,6 +33,19 @@ COPY ./extension/swoole_loader/swoole_loader73.so /usr/local/lib/php/extensions/
 
 # for PHP 7.4
 # COPY ./extension/swoole_loader/swoole_loader74.so /usr/local/lib/php/extensions/no-debug-non-zts-20190902/swoole_loader74.so
+
+# install yasd (extension for debugging)
+RUN cd /tmp && \
+    git clone https://github.com/swoole/yasd.git && \
+    cd yasd && \
+    phpize --clean && \
+    phpize && \
+    ./configure && \
+    make clean && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf yasd
 
 COPY docker-php-entrypoint.sh /usr/local/bin/
 RUN ["chmod", "+x", "/usr/local/bin/docker-php-entrypoint.sh"]

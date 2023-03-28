@@ -47,6 +47,8 @@ services:
       TZ: Asia/Shanghai
     expose:
       - 8324
+    ports:
+      - 9000:9000
     tmpfs: /var/temp #上传临时文件夹
     working_dir: /var/www
     tty: true
