@@ -76,11 +76,8 @@ Earlier versions may also work but haven’t been tested.
     [http://localhost:28238/](http://localhost:28238/)
     
     You shall see the installation wizard page of CRMEB. Please follow the prompts to complete the installation.
-    <aside>
-    💡 You can also change the port in the `.env` file accordingly.
-    </aside>
     
-8. Configuration for services(other fields can be left default)
+    Configuration for services(other fields can be left default)
     
     
     | 数据库MySql配置 |           |
@@ -100,12 +97,12 @@ Earlier versions may also work but haven’t been tested.
     💡 You can also find / change these parameters in the `.env` file.
     </aside>
 
-9.  Once the installation is complete, it's necessary to restart the PHP services to ensure that CRMEB-MER is fully functional.
+8.  Once the installation is complete, it's necessary to restart the PHP services to ensure that CRMEB-MER is fully functional.
     ```bash
     docker compose restart php-fpm
     ```
 
-10. After restarting, you can access the frontend site and admin site respectively at
+9. After restarting, you can access the frontend site and admin site respectively at
     1. [http://localhost:28238](http://localhost:28238)
     2. [http://localhost:28238/admin](http://localhost:28238/admin)
     
@@ -113,11 +110,11 @@ Earlier versions may also work but haven’t been tested.
     💡 Note: it may take a while for the front end site to load.
     </aside>
     
-11. This docker-compose combo also packs a PHPMYADMIN for easy database access, you can find it at
+10. This docker-compose combo also packs a PHPMYADMIN for easy database access, you can find it at
     
     [http://localhost:28239/](http://localhost:28239/)
     
-12. To shut everything down
+11. To shut everything down
     
     ```bash
     docker compose down
