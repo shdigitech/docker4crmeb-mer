@@ -11,6 +11,7 @@ services:
       - 6379
     networks:
       - service
+    profiles: [ "dev" ]
 
   mysql:
     image: mysql:8 # https://hub.docker.com/_/mysql/ - or mariadb https://hub.docker.com/_/mariadb
